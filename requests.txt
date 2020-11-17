@@ -1,0 +1,27 @@
+Get topic list
+
+curl -X GET "http://localhost:8080/topic" -H "accept: application/json"
+
+Post new topic
+curl --user user:password -X POST "http://localhost:8080/topic" -H "accept: application/json" -H "Content-Type: multipart/form-data" -F "file=@sample.jpg;type=image/jpeg" -F "name=Name" -F "body=Body"
+
+Get topic by id
+curl -X GET "http://localhost:8080/topic/2" -H "accept: application/json"
+
+Update topic content
+curl --user user:password -X PUT "http://localhost:8080/topic/2" -H "accept: application/json" -H "Content-Type: multipart/form-data" -F "file=@sample.jpg;type=image/jpeg" -F "name=New Name" -F "body=New Body"
+
+Delete topic
+curl --user user:password -X DELETE "http://localhost:8080/topic/2"
+
+Read topic picture
+curl -X GET "http://localhost:8080/topic/2/picture" -H "accept: image/jpeg"
+
+Get comments
+curl -X GET "http://localhost:8080/topic/1/comment" -H "accept: application/json"
+
+Post new comment
+curl --user user:password -X POST "http://localhost:8080/topic/1/comment" -H "accept: application/json" -H "Content-Type: text/plain" -d "Comment text"
+
+Modify comment
+curl --user user:password -X PUT "http://localhost:8080/topic/1/comment/2" -H "accept: application/json" -H "Content-Type: text/plain" -d "Another text"

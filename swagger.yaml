@@ -1,0 +1,322 @@
+swagger: '2.0'
+info:
+  description: This is a sample blog server
+  version: 1.0.0
+  title: Swagger Blog
+  contact:
+    email: vadim@podlesov.info
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: 'localhost:8080'
+basePath: /
+tags:
+  - name: comment-api-controller
+    description: the comment API
+  - name: topic-api-controller
+    description: the topic API
+paths:
+  /topic:
+    get:
+      tags:
+        - topic-api-controller
+      summary: Retrieve topics
+      operationId: getTopic
+      produces:
+        - application/json
+      parameters:
+        - name: page
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: size
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: sort
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Topic'
+    post:
+      tags:
+        - topic-api-controller
+      summary: Add a new blog topic
+      operationId: postTopic
+      consumes:
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - name: file
+          in: formData
+          required: false
+          type: file
+        - name: name
+          in: formData
+          required: false
+          type: string
+        - name: body
+          in: formData
+          required: false
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Topic'
+        '400':
+          description: Invalid input
+  '/topic/{topicId}':
+    get:
+      tags:
+        - topic-api-controller
+      summary: Retrieve by ID
+      description: Returns a single topic
+      operationId: getTopicById
+      produces:
+        - application/json
+      parameters:
+        - name: topicId
+          in: path
+          description: ID of topic to return
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Topic'
+        '404':
+          description: Resource not found
+    put:
+      tags:
+        - topic-api-controller
+      summary: Updates a topic with form data
+      operationId: updateTopic
+      consumes:
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - name: file
+          in: formData
+          required: false
+          type: file
+        - name: name
+          in: formData
+          required: false
+          type: string
+        - name: body
+          in: formData
+          required: false
+          type: string
+        - name: topicId
+          in: path
+          description: ID of topic that needs to be updated
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Topic'
+        '400':
+          description: Invalid input
+    delete:
+      tags:
+        - topic-api-controller
+      summary: Deletes a topic
+      operationId: deleteTopic
+      produces:
+        - application/json
+      parameters:
+        - name: topicId
+          in: path
+          description: topic id to delete
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+        '412':
+          description: Can't delete topic with comments
+  '/topic/{topicId}/comment':
+    get:
+      tags:
+        - comment-api-controller
+      summary: get comments
+      operationId: getComment
+      produces:
+        - application/json
+      parameters:
+        - name: page
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: size
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: sort
+          in: query
+          required: false
+          type: string
+        - name: topicId
+          in: path
+          description: ID of parent topic
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Comment'
+        '404':
+          description: Resource not found
+    post:
+      tags:
+        - comment-api-controller
+      summary: postComment
+      operationId: postComment
+      consumes:
+        - text/plain
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Comment body
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: ID of topic to comment
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Comment'
+        '400':
+          description: Invalid input
+        '404':
+          description: Resource not found
+  '/topic/{topicId}/comment/{id}':
+    put:
+      tags:
+        - comment-api-controller
+      summary: update comment
+      operationId: putComment
+      consumes:
+        - text/plain
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Comment body
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: ID of comment
+          required: true
+          type: integer
+          format: int64
+        - name: topicId
+          in: path
+          description: ID of topic
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Comment'
+        '400':
+          description: Invalid input
+        '404':
+          description: Resource not found
+  '/topic/{topicId}/picture':
+    get:
+      tags:
+        - topic-api-controller
+      summary: Retrieve picture by topic ID
+      description: Returns a single topic
+      operationId: getTopicById_1
+      produces:
+        - image/jpeg
+      parameters:
+        - name: topicId
+          in: path
+          description: ID of topic to return
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Topic'
+        '404':
+          description: Resource not found
+  /topic2:
+    post:
+      tags:
+        - topic-api-controller
+      summary: postTopicJson
+      operationId: postTopicJsonUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: topic
+          description: Topic json
+          required: true
+          schema:
+            $ref: '#/definitions/Topic'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Topic'
+        '400':
+          description: Invalid input
+definitions:
+  Comment:
+    type: object
+    title: Comment
+  Page«Comment»:
+    type: object
+    title: Page«Comment»
+  Page«Topic»:
+    type: object
+    title: Page«Topic»
+  Resource:
+    type: object
+    title: Resource
+  Topic:
+    type: object
+    title: Topic
